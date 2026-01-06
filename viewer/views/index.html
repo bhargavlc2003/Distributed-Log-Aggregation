@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Redis-Mongo Viewer</title>
+</head>
+<body>
+  <h1>Messages from Producer</h1>
+  <ul id="messages"></ul>
+
+  <script>
+    async function loadMessages() {
+      const res = await fetch('/messages');
+      const data = await res.json();
+      const ul = document.getElementById('messages');
+      ul.innerHTML = '';
+      data.forEach(msg => {
+        const li = document.createElement('li');
+        li.textContent = `${msg.content} - Created: ${new Date(msg.createdAt).toLocaleTimeString()}${msg.consumedAt ? ' | Consumed: ' + new Date(msg.consumedAt).toLocaleTimeString() : ''}`;
+        ul.appendChild(li);
+      });
+    }
+
+    setInterval(loadMessages, 1000); // refresh 
+    loadMessages();
+  </script>
+</body>
+</html>
